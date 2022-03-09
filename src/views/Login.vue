@@ -32,6 +32,7 @@ export default {
       return {
         email: '',
         password: '',
+        id: ''
       }
     },
     methods: {
@@ -40,11 +41,21 @@ export default {
         },
         login() {
           let {email, password} = this
-          axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA-xbeVgis0M4jhfDDNcTBfAg7_tMzkTf8', {email, password}
+          axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA-xbeVgis0M4jhfDDNcTBfAg7_tMzkTf8', {email, password, returnSecureToken: true}
           ).then(res=> {
             console.log(res.data);
-            // id=res.data.localId
-            this.$router.push(`/dashboard/${email}`)
+            if (res.data.registered == true) {
+              axios.get('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register.json').then(res => {
+                console.log(res.data);
+                let a = Object.values(res.data);
+                console.log(a);
+                let b = a.find((val) => val.email == email)
+                console.log(b);
+                let id = b.User
+                console.log(id);
+                this.$router.push(`/dashboard/${id}`)
+              })
+            }
           }).catch(err=> {
             console.log(err.message)
           })

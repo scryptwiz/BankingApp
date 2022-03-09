@@ -2,7 +2,7 @@
     <div class="hidden lg:flex h-screen bg-white bg-opacity-20 w-52 p-5 flex-col justify-between">
             <h3 class="font-semibold bank text-xl">Bank</h3>
             <div id="nave" class="h-56 flex flex-col justify-around">
-                <router-link to="/dashboard" class="flex items-center outline-none">
+                <router-link to='/dashbard/:id'  class="flex items-center outline-none">
                     <i class="fas fa-home text-white dash"></i>
                     <p class="home text-xl ml-2">Home</p>
                 </router-link>

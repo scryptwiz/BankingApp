@@ -36,7 +36,6 @@ export default {
       password: '',
       accountNo: '',
       accountBal: '',
-      uId: '',
       userInfo: []
     }
   },
@@ -52,21 +51,24 @@ export default {
           }
           axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA-xbeVgis0M4jhfDDNcTBfAg7_tMzkTf8', {
             username, email, password
-          }). then (res=>{
+           }).then (res=>{
             localStorage.setItem('BankingUserToken', res.data.idToken)
             console.log(res.data)
-            this.$router.push(`/`)
+            accountBal = '$50,000'
+            let User = Math.floor(100000 + Math.random() * 900000)
+            axios.post('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register.json', {email, username, accountNo, accountBal, User}).then(res=> {
+              this.userInfo = res.data
+              console.log(this.userInfo);
+              console.log(res.data);
+              this.$router.push(`/`)
+            }).catch(err=>{
+            alert(err.message)
+          })
             // this.username = '',
             // this.email = '',
             // this.password = ''
           }).catch(err=>{
             alert(err.message)
-          })
-          accountBal = '$50,000'
-          axios.post('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register.json', {email, username, accountNo, accountBal}).then(res=> {
-            this.userInfo = res.data
-            console.log(this.userInfo);
-            console.log(res.data);
           })
         }
     }

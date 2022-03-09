@@ -3,7 +3,7 @@
         <SideNav class="md:hidden"/>
         <div class="p-5 lg:pl-20 lg:pr-20 lg:pt-10 lg:pb-10 md:p-16 flex flex-col w-full h-screen overflow-hidden overflow-y-scroll">
             <div>
-                <h3 class="font-semibold text-xl mb-4">Welcome <br/>Kelvin</h3>
+                <h3 class="font-semibold text-xl mb-4">Welcome <br/>{{this.Username}}</h3>
                 <div class="w-full h-80 bg-yellow-600 rounded-lg"></div>
                 <!-- mainbody -->
                 <div class="flex flex-col lg:flex-row lg:justify-between">
@@ -11,7 +11,7 @@
                     <div class="bg-black bg-opacity-30 shadow w-full mt-5 md:mt-10 lg:mt-5 h-64 rounded-lg lg:mr-5 p-7 flex flex-col justify-between">
                         <h3 class="text-4xl font-semibold cardLogo">Bank</h3>
                         <div class="flex justify-between items-center">
-                            <h3 class="text-2xl text-white text-opacity-50 cardNum">{{this.accountNo.accountNo}}</h3>
+                            <h3 class="text-2xl text-white text-opacity-50 cardNum">{{this.accountNo}}</h3>
                             <i class="fas fa-sim-card text-white text-opacity-30 text-3xl cardChip"></i>
                         </div>
                         <h3 class="text-2xl text-white text-opacity-50 text-right cardNum">Visa</h3>
@@ -60,19 +60,24 @@ import axios from 'axios'
 export default {
     data(){
         return{
-            accountNo: ''
+            accountNo: '',
+            Username: ''
         }
     },
     mounted() {
-        console.log(this.$route.params.id);
+        let  myId = this.$route.params.id
         axios.get('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register.json').then(res=> {
-            console.log(res.data);
+            let a = Object.values(res.data);
+            console.log(a);
+            let b = a.find((val) => val.User == myId);
+            console.log(b);
+            this.Username = b.username
+            this.accountNo = b.accountNo
         })
-        axios.get('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register/-MrYB1SA6uZGNe1d4YU0.json').then(res=>{
-            localStorage.setItem('BankingUserInfo', JSON.stringify(res.data))
-        })
-        this.accountNo = JSON.parse(localStorage.getItem("BankingUserInfo"))
-        console.log(JSON.parse(localStorage.getItem("BankingUserInfo")));
+        // axios.get('https://banking-app-5f7cb-default-rtdb.firebaseio.com/register/-MrZNkgHeXXJCksN69mo.json').then(res=>{
+        //     localStorage.setItem('BankingUserInfo', JSON.stringify(res.data))
+        // })
+        // console.log(JSON.parse(localStorage.getItem("BankingUserInfo")));
     },
     components:{
         BottomNav,
